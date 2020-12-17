@@ -17,7 +17,7 @@ function pageLoaded(){
 	video1.pause();
 	// Connecting to LRS
 	var conf = {
-	  "endpoint" : "https://cloud.scorm.com/tc/CJ0NK8AJKV/sandbox/",
+	  "endpoint" : "https://cloud.scorm.com/lrs/ZK5IC0NDVA/sandbox/",
 	  "auth" : "Basic " + toBase64('jeffbatt@gmail.com:DevLearn17'),
 	};
 	ADL.XAPIWrapper.changeConfig(conf);
