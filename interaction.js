@@ -1,47 +1,77 @@
 // Various variables
-	var videoHalfWay = 0;
-	var currentTime;
-	var durationTime;
-	
+var videoHalfWay = 0;
+var currentTime;
+var durationTime;
 
-	// Actor Variables
-	var name = "Joe Smoe";
-	var email = "joe@smoe.com";
-	var firstPlayDone = false;
-	
+// Actor Variables
+var name = "Joe Smoe";
+var email = "joe@smoe.com";
+var firstPlayDone = false;
 
-	// Video reference
-	var video1 = document.getElementById('video1');
-	
+// Video reference
+var video1 = document.getElementById('video1');
 
-	// Interaction loaded
-	function pageLoaded(){
-		// Pause video
-		video1.pause();
-		// Connecting to LRS
-		var conf = {
-		  "endpoint" : "https://cloud.scorm.com/lrs/ZK5IC0NDVA/sandbox/",
-		  "auth" : "Basic " + toBase64('paulcondel@gmail.com:metacharsetutf8'),
-		};
-		ADL.XAPIWrapper.changeConfig(conf);
-	
+// Interaction loaded
+function pageLoaded(){
+	// Pause video
+	video1.pause();
+	// Connecting to LRS
+	var conf = {
+	  "endpoint" : "https://cloud.scorm.com/lrs/ZK5IC0NDVA/sandbox/",
+	  "auth" : "Basic " + toBase64('paulcondel@gmail.com:metacharsetutf8'),
+	};
+	ADL.XAPIWrapper.changeConfig(conf);
 
-		// Show prompt
-		$('#namePrompt').modal('show')
-	}
-	
+	// Show prompt
+	$('#namePrompt').modal('show')
+}
 
-// Video play
-	video1.onplaying = function(){
-		var videoPlay = {  
+// Video loaded
+video1.onloadedmetadata = function(){
+	// Figuring out times
+	videoHalfWay = Math.round(video1.duration/2);
+	durationTime = Math.round(video1.duration);
+}
+
+// Video Half Way
+video1.ontimeupdate = function(){
+	// Update current time
+	currentTime = Math.round(video1.currentTime);
+
+    if (currentTime == videoHalfWay) {
+    	var videoHalf = {  
 		    "actor": {  
 		        "mbox": "mailto:"+email,  
 		        "name": name,  
 		        "objectType": "Agent"  
 		    },  
 		    "verb": {  
-		        "id": "http://adlnet.gov/expapi/verbs/initialized",  
-		        "display": {"en-US": "initialized"}  
+		        "id": "http://activitystrea.ms/schema/1.0/consume",  
+		        "display": {"en-US": "consumed"}  
+		    },  
+		    "object": {  
+		        "id": "http://learningdojo.net/xapi/video1",  
+		        "definition": {  
+		            "name": {"en-US": "Video 1"},  
+		            "description": {"en-US": "at least half of the video"}  
+		        },  
+		        "objectType": "Activity"  
+		    }  
+		};
+
+		ADL.XAPIWrapper.sendStatement(videoHalf);
+    }
+
+    if (currentTime == durationTime) {
+    	var videoEnd = {  
+		    "actor": {  
+		        "mbox": "mailto:"+email,  
+		        "name": name,  
+		        "objectType": "Agent"  
+		    },  
+		    "verb": {  
+		        "id": "http://activitystrea.ms/schema/1.0/complete",  
+		        "display": {"en-US": "completed"}  
 		    },  
 		    "object": {  
 		        "id": "http://learningdojo.net/xapi/video1",  
@@ -52,26 +82,73 @@
 		        "objectType": "Activity"  
 		    }  
 		};
-	
 
-		ADL.XAPIWrapper.sendStatement(videoPlay); 
-	}
+		ADL.XAPIWrapper.sendStatement(videoEnd); 
+    }
+};
 
+// Video play
+video1.onplaying = function(){
+	var videoPlay = {  
+	    "actor": {  
+	        "mbox": "mailto:"+email,  
+	        "name": name,  
+	        "objectType": "Agent"  
+	    },  
+	    "verb": {  
+	        "id": "http://adlnet.gov/expapi/verbs/initialized",  
+	        "display": {"en-US": "initialized"}  
+	    },  
+	    "object": {  
+	        "id": "http://learningdojo.net/xapi/video1",  
+	        "definition": {  
+	            "name": {"en-US": "Video 1"},  
+	            "description": {"en-US": "the video"}  
+	        },  
+	        "objectType": "Activity"  
+	    }  
+	};
+
+	ADL.XAPIWrapper.sendStatement(videoPlay); 
+}
+
+// Video pause
+video1.onpause = function(){
+	var videoPause = {  
+	    "actor": {  
+	        "mbox": "mailto:"+email,  
+	        "name": name,  
+	        "objectType": "Agent"  
+	    },  
+	    "verb": {  
+	        "id": "https://w3id.org/xapi/video/verbs/paused",  
+	        "display": {"en-US": "paused"}  
+	    },  
+	    "object": {  
+	        "id": "http://learningdojo.net/xapi/video1",  
+	        "definition": {  
+	            "name": {"en-US": "Video 1"},  
+	            "description": {"en-US": "the video at " + currentTime + " seconds."}  
+	        },  
+	        "objectType": "Activity"  
+	    }  
+	};
+
+	ADL.XAPIWrapper.sendStatement(videoPause); 
+}
 
 // Getting User
-	function saveName(){
-		name = document.getElementById('nameEntered').value;
-		console.log(name);
-	}
-	
+function saveName(){
+	name = document.getElementById('nameEntered').value;
+	console.log(name);
+}
 
-	function saveEmail(){
-		email = document.getElementById('userEmail').value;
-		console.log(email)
-	}
-	
+function saveEmail(){
+	email = document.getElementById('userEmail').value;
+	console.log(email)
+}
 
-	function playVideo(){
-		video1.play();
-	}
+function playVideo(){
+	video1.play();
+}
 
