@@ -105,10 +105,10 @@ function isDate(date) {
      */
     var Config = function()
     {
-        var key = "4NWI_hcWLlmqyQAhSiE";
-        var secret = "aVkZim3lxv8kt7NE2xo";
+        var key = "QpoMICzE2YOj9S-bR5k";
+        var secret = "oIlCYyzhK1Lj7Rx130I";
         var conf = {
-            "endpoint" : "https://cloud.scorm.com/tc/CJ0NK8AJKV/sandbox/",
+            "endpoint" : "https://cloud.scorm.com/lrs/ZK5IC0NDVA/sandbox/",
             "auth" : "Basic " + toBase64(key + ':' + secret),
         };
 
