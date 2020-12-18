@@ -21,7 +21,7 @@
 		// Connecting to LRS
 		var conf = {
 		  "endpoint" : "https://cloud.scorm.com/lrs/ZK5IC0NDVA/sandbox/",
-		  "auth" : "Basic " + toBase64('jeffbatt@gmail.com:DevLearn17'),
+		  "auth" : "Basic " + toBase64('paulcondel@gmail.com:metacharsetutf8'),
 		};
 		ADL.XAPIWrapper.changeConfig(conf);
 	
